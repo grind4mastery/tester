@@ -92,7 +92,7 @@ const WordleGame = () => {
   };
 
   return (
-    <div className="relative bg-gray-900 py-2 px-1 min-h-screen flex flex-col items-center">
+    <div className="relative bg-gray-900 py-2 px-2 min-h-screen flex flex-col items-center justify-between">
       <div className="flex flex-col items-center w-full max-w-4xl mx-auto">
         {/* Wordle Game Board Container */}
         <div className="grid grid-rows-6 gap-2 mb-4 justify-center">
@@ -162,7 +162,7 @@ const WordleGame = () => {
         <p className="mt-4 text-lg text-white">{message}</p>
 
         {gameOver && (
-          <div className="mt-4">
+          <div className="mt-4 text-center">
             <p className="text-2xl font-bold text-white">Your Score: {score}</p>
             <button
               onClick={resetGame}
