@@ -38,7 +38,7 @@ const WordleGame = () => {
 
     if (guess === targetWord) {
       setScore(6 - attempts.length); // Score based on how many attempts it took
-      setMessage("Congratulations! You guessed the word!");
+      setMessage("Congratulations!");
       setGameOver(true);
       setTriggerConfetti(true); // Trigger confetti on correct guess
     } else if (attempts.length >= 5) {
