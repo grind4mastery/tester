@@ -15,22 +15,10 @@ const WordleGame = () => {
     words[Math.floor(Math.random() * words.length)].toUpperCase()
   );
   const [triggerConfetti, setTriggerConfetti] = useState(false); // State to trigger confetti
-  const [keyboardMode, setKeyboardMode] = useState(false); // Toggle between keyboard and input mode
 
-  // Handle input change for text input mode
   const handleInputChange = (e) => {
-    setGuess(e.target.value.toUpperCase().slice(0, 5)); // Limit input to 5 characters and convert to uppercase
-  };
-
-  // Handle key presses in keyboard mode
-  const handleKeyPress = (key) => {
-    if (key === "Enter") {
-      submitGuess();
-    } else if (key === "Backspace") {
-      setGuess(guess.slice(0, -1)); // Remove the last character
-    } else if (guess.length < 5) {
-      setGuess(guess + key); // Add the letter to the guess
-    }
+    // Limit input to 5 characters and convert to uppercase
+    setGuess(e.target.value.toUpperCase().slice(0, 5));
   };
 
   const submitGuess = () => {
@@ -39,29 +27,13 @@ const WordleGame = () => {
       return;
     }
 
-    let result = Array(5).fill("wrong"); // Start with all letters as wrong
-    let targetWordArr = targetWord.split(""); // Copy of the target word to track usage
-
-    // First pass: Identify correct (green) positions
-    guess.split("").forEach((char, i) => {
-      if (char === targetWordArr[i]) {
-        result[i] = "correct"; // Correct match (correct position)
-        targetWordArr[i] = null; // Mark this letter as used
-      }
+    // Check the guess result only after the player submits
+    const result = guess.split("").map((char, i) => {
+      if (char === targetWord[i]) return "correct";
+      if (targetWord.includes(char)) return "close";
+      return "wrong";
     });
 
-    // Second pass: Identify close (yellow) positions, excluding already correct ones
-    guess.split("").forEach((char, i) => {
-      if (result[i] === "correct") return; // Skip already correct letters
-
-      const indexInTarget = targetWordArr.indexOf(char); // Find the letter in the target word
-      if (indexInTarget !== -1) {
-        result[i] = "close"; // Close match (wrong position)
-        targetWordArr[indexInTarget] = null; // Mark this letter as used
-      }
-    });
-
-    // Store the result in attempts
     setAttempts([...attempts, { guess, result }]);
     setGuess(""); // Reset input field after submitting guess
 
@@ -90,19 +62,12 @@ const WordleGame = () => {
     setTriggerConfetti(false); // Reset confetti trigger
   };
 
-  // Keyboard buttons layout (same as Wordle)
-  const keyboardRows = [
-    ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
-    ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
-    ["Z", "X", "C", "V", "B", "N", "M", "Backspace", "Enter"],
-  ];
-
   return (
-    <div className="relative bg-gray-900 py-8 px-4">
+    <div className="relative bg-gray-900 py-8">
       <div className="flex justify-center items-start w-full max-w-4xl mx-auto">
         {/* Wordle Game Board Container */}
-        <div className="flex flex-col items-center max-w-sm w-full">
-          <h1 className="text-2xl font-bold mb-4 text-white">Wordle Game</h1>
+        <div className="flex flex-col items-center max-w-sm">
+          <h1 className="text-2xl font-bold mb-4">Wordle Game</h1>
 
           <div className="grid grid-rows-6 gap-2 mb-4 justify-center">
             {Array.from({ length: 6 }).map((_, attemptIndex) => (
@@ -132,62 +97,33 @@ const WordleGame = () => {
             ))}
           </div>
 
-          {!keyboardMode ? (
-            <input
-              type="text"
-              value={guess}
-              onChange={handleInputChange}
-              maxLength="5"
-              placeholder="Enter 5-letter word"
-              className="border p-2 mb-2 text-center text-lg uppercase text-black w-full"
-              disabled={gameOver}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  submitGuess();
-                }
-              }}
-            />
-          ) : (
-            <div className="flex flex-col items-center w-full">
-              {keyboardRows.map((row, rowIndex) => (
-                <div key={rowIndex} className="flex justify-center w-full mb-2">
-                  {row.map((key, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleKeyPress(key)}
-                      className="w-10 h-10 bg-gray-700 text-white rounded m-1 text-lg font-bold disabled:opacity-50"
-                      disabled={gameOver}
-                    >
-                      {key === "Backspace" ? "←" : key === "Enter" ? "⏎" : key}
-                    </button>
-                  ))}
-                </div>
-              ))}
-            </div>
-          )}
-
+          <input
+            type="text"
+            value={guess}
+            onChange={handleInputChange}
+            maxLength="5"
+            placeholder="Enter 5-letter word"
+            className="border p-2 mb-2 text-center text-lg uppercase text-black"
+            disabled={gameOver}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                submitGuess();
+              }
+            }}
+          />
           <button
             onClick={submitGuess}
-            className="bg-blue-500 text-white py-2 px-4 rounded w-full mt-4"
+            className="bg-blue-500 text-white py-2 px-4 rounded"
             disabled={gameOver}
           >
             Submit
           </button>
 
-          <button
-            onClick={() => setKeyboardMode(!keyboardMode)}
-            className="bg-gray-500 text-white py-2 px-4 rounded mt-2 w-full"
-          >
-            Switch to {keyboardMode ? "Text Input" : "Keyboard"}
-          </button>
-
-          <p className="mt-4 text-lg text-white">{message}</p>
+          <p className="mt-4 text-lg">{message}</p>
 
           {gameOver && (
             <div className="mt-4">
-              <p className="text-2xl font-bold text-white">
-                Your Score: {score}
-              </p>
+              <p className="text-2xl font-bold">Your Score: {score}</p>
               <button
                 onClick={resetGame}
                 className="bg-green-500 text-white py-2 px-4 rounded mt-2"
