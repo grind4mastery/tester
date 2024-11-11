@@ -11,7 +11,13 @@ const Keyboard = ({ onKeyPress, disabled }) => {
   ];
 
   return (
-    <div className="flex flex-col items-center w-full mt-0 px-0">
+    <div
+      className={`${
+        isMobile
+          ? "fixed bottom-0 left-0 right-0"
+          : "flex flex-col items-center w-full"
+      } bg-gray-800 px-4 py-2`}
+    >
       {keyboardRows.map((row, rowIndex) => (
         <div key={rowIndex} className="flex justify-between w-full mb-2">
           {row.map((key, index) => (
@@ -20,8 +26,8 @@ const Keyboard = ({ onKeyPress, disabled }) => {
               onClick={() => onKeyPress(key)}
               className={`${
                 isMobile
-                  ? "flex-1 mx-0.5 py-2 text-lg"
-                  : "w-10 h-10 mx-1 text-base"
+                  ? "flex-1 py-2 text-lg" // Mobile layout
+                  : "w-10 h-10 mx-1 text-base" // Desktop layout
               } bg-gray-700 text-white rounded font-bold disabled:opacity-50`}
               disabled={disabled}
               style={{
