@@ -11,7 +11,7 @@ const Keyboard = ({ onKeyPress, disabled }) => {
   ];
 
   return (
-    <div className="flex flex-col items-center w-full mt-4 px-2">
+    <div className="flex flex-col items-center w-full mt-0 px-0">
       {keyboardRows.map((row, rowIndex) => (
         <div key={rowIndex} className="flex justify-between w-full mb-2">
           {row.map((key, index) => (

@@ -92,11 +92,9 @@ const WordleGame = () => {
   };
 
   return (
-    <div className="relative bg-gray-900 py-8 px-4 min-h-screen flex flex-col items-center">
+    <div className="relative bg-gray-900 py-2 px-1 min-h-screen flex flex-col items-center">
       <div className="flex flex-col items-center w-full max-w-4xl mx-auto">
         {/* Wordle Game Board Container */}
-        {/* <h1 className="text-2xl font-bold mb-4 text-white">Wordle Game</h1> */}
-
         <div className="grid grid-rows-6 gap-2 mb-4 justify-center">
           {Array.from({ length: 6 }).map((_, attemptIndex) => (
             <div key={attemptIndex} className="flex justify-center gap-1">
@@ -127,31 +125,32 @@ const WordleGame = () => {
 
         {/* Toggle between text input and on-screen keyboard */}
         {!keyboardMode ? (
-          <input
-            type="text"
-            value={guess}
-            onChange={handleInputChange}
-            maxLength="5"
-            placeholder="Enter 5-letter word"
-            className="border p-2 mb-2 text-center text-lg uppercase text-black w-full"
-            disabled={gameOver}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                submitGuess();
-              }
-            }}
-          />
+          <div className="flex items-center w-full">
+            <input
+              type="text"
+              value={guess}
+              onChange={handleInputChange}
+              maxLength="5"
+              placeholder="Enter 5-letter word"
+              className="border p-2 mb-2 text-center text-lg uppercase text-black w-full"
+              disabled={gameOver}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  submitGuess();
+                }
+              }}
+            />
+            <button
+              onClick={submitGuess}
+              className="bg-blue-500 text-white py-2 px-4 rounded ml-2 w-auto"
+              disabled={gameOver}
+            >
+              Submit
+            </button>
+          </div>
         ) : (
           <Keyboard onKeyPress={handleKeyPress} disabled={gameOver} />
         )}
-
-        <button
-          onClick={submitGuess}
-          className="bg-blue-500 text-white py-2 px-4 rounded w-full mt-4"
-          disabled={gameOver}
-        >
-          Submit
-        </button>
 
         <button
           onClick={() => setKeyboardMode(!keyboardMode)}
