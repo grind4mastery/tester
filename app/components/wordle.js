@@ -92,91 +92,87 @@ const WordleGame = () => {
   };
 
   return (
-    <div className="relative bg-gray-900 py-8 px-4">
-      <div className="flex justify-center items-start w-full max-w-4xl mx-auto">
+    <div className="relative bg-gray-900 py-8 px-4 min-h-screen flex flex-col items-center">
+      <div className="flex flex-col items-center w-full max-w-4xl mx-auto">
         {/* Wordle Game Board Container */}
-        <div className="flex flex-col items-center max-w-sm w-full">
-          {/* <h1 className="text-2xl font-bold mb-4 text-white">Wordle Game</h1> */}
+        <h1 className="text-2xl font-bold mb-4 text-white">Wordle Game</h1>
 
-          <div className="grid grid-rows-6 gap-2 mb-4 justify-center">
-            {Array.from({ length: 6 }).map((_, attemptIndex) => (
-              <div key={attemptIndex} className="flex justify-center gap-1">
-                {Array.from({ length: 5 }).map((_, charIndex) => {
-                  const attempt = attempts[attemptIndex];
-                  const char = attempt
-                    ? attempt.guess[charIndex]
-                    : attemptIndex === attempts.length
-                    ? guess[charIndex]
-                    : ""; // Render input letters dynamically
-                  const result = attempt ? attempt.result[charIndex] : null;
+        <div className="grid grid-rows-6 gap-2 mb-4 justify-center">
+          {Array.from({ length: 6 }).map((_, attemptIndex) => (
+            <div key={attemptIndex} className="flex justify-center gap-1">
+              {Array.from({ length: 5 }).map((_, charIndex) => {
+                const attempt = attempts[attemptIndex];
+                const char = attempt
+                  ? attempt.guess[charIndex]
+                  : attemptIndex === attempts.length
+                  ? guess[charIndex]
+                  : ""; // Render input letters dynamically
+                const result = attempt ? attempt.result[charIndex] : null;
 
-                  return (
-                    <div
-                      key={charIndex}
-                      className={`w-12 h-12 flex items-center justify-center border-2 border-gray-700 text-lg font-bold 
-                        ${result === "correct" ? "bg-green-500 text-white" : ""}
-                        ${result === "close" ? "bg-yellow-300 text-black" : ""}
-                        ${result === "wrong" ? "bg-gray-500 text-white" : ""}`}
-                    >
-                      {char}
-                    </div>
-                  );
-                })}
-              </div>
-            ))}
-          </div>
-
-          {/* Toggle between text input and on-screen keyboard */}
-          {!keyboardMode ? (
-            <input
-              type="text"
-              value={guess}
-              onChange={handleInputChange}
-              maxLength="5"
-              placeholder="Enter 5-letter word"
-              className="border p-2 mb-2 text-center text-lg uppercase text-black w-full"
-              disabled={gameOver}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  submitGuess();
-                }
-              }}
-            />
-          ) : (
-            <Keyboard onKeyPress={handleKeyPress} disabled={gameOver} />
-          )}
-
-          <button
-            onClick={submitGuess}
-            className="bg-blue-500 text-white py-2 px-4 rounded w-full mt-4"
-            disabled={gameOver}
-          >
-            Submit
-          </button>
-
-          <button
-            onClick={() => setKeyboardMode(!keyboardMode)}
-            className="bg-gray-500 text-white py-2 px-4 rounded mt-2 w-full"
-          >
-            Switch to {keyboardMode ? "Text Input" : "Keyboard"}
-          </button>
-
-          <p className="mt-4 text-lg text-white">{message}</p>
-
-          {gameOver && (
-            <div className="mt-4">
-              <p className="text-2xl font-bold text-white">
-                Your Score: {score}
-              </p>
-              <button
-                onClick={resetGame}
-                className="bg-green-500 text-white py-2 px-4 rounded mt-2"
-              >
-                Go again!
-              </button>
+                return (
+                  <div
+                    key={charIndex}
+                    className={`w-12 h-12 flex items-center justify-center border-2 border-gray-700 text-lg font-bold 
+                      ${result === "correct" ? "bg-green-500 text-white" : ""}
+                      ${result === "close" ? "bg-yellow-300 text-black" : ""}
+                      ${result === "wrong" ? "bg-gray-500 text-white" : ""}`}
+                  >
+                    {char}
+                  </div>
+                );
+              })}
             </div>
-          )}
+          ))}
         </div>
+
+        {/* Toggle between text input and on-screen keyboard */}
+        {!keyboardMode ? (
+          <input
+            type="text"
+            value={guess}
+            onChange={handleInputChange}
+            maxLength="5"
+            placeholder="Enter 5-letter word"
+            className="border p-2 mb-2 text-center text-lg uppercase text-black w-full"
+            disabled={gameOver}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                submitGuess();
+              }
+            }}
+          />
+        ) : (
+          <Keyboard onKeyPress={handleKeyPress} disabled={gameOver} />
+        )}
+
+        <button
+          onClick={submitGuess}
+          className="bg-blue-500 text-white py-2 px-4 rounded w-full mt-4"
+          disabled={gameOver}
+        >
+          Submit
+        </button>
+
+        <button
+          onClick={() => setKeyboardMode(!keyboardMode)}
+          className="bg-gray-500 text-white py-2 px-4 rounded mt-2 w-full"
+        >
+          Switch to {keyboardMode ? "Text Input" : "Keyboard"}
+        </button>
+
+        <p className="mt-4 text-lg text-white">{message}</p>
+
+        {gameOver && (
+          <div className="mt-4">
+            <p className="text-2xl font-bold text-white">Your Score: {score}</p>
+            <button
+              onClick={resetGame}
+              className="bg-green-500 text-white py-2 px-4 rounded mt-2"
+            >
+              Go again!
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Trigger Confetti when the player wins */}
