@@ -95,7 +95,7 @@ const WordleGame = () => {
     <div className="relative bg-gray-900 py-8 px-4 min-h-screen flex flex-col items-center">
       <div className="flex flex-col items-center w-full max-w-4xl mx-auto">
         {/* Wordle Game Board Container */}
-        <h1 className="text-2xl font-bold mb-4 text-white">Wordle Game</h1>
+        {/* <h1 className="text-2xl font-bold mb-4 text-white">Wordle Game</h1> */}
 
         <div className="grid grid-rows-6 gap-2 mb-4 justify-center">
           {Array.from({ length: 6 }).map((_, attemptIndex) => (
