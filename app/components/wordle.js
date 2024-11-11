@@ -1,7 +1,8 @@
 "use client"; // Mark this file as client-side
 
 import React, { useState } from "react";
-import ConfettiComponent from "./confetti"; // Import the ConfettiComponent
+import ConfettiComponent from "./confetti";
+import Keyboard from "./keyboard"; // Import the Keyboard component
 
 const WordleGame = () => {
   const words = ["apple", "stone"]; // Words array with only "apple" and "stone"
@@ -90,19 +91,12 @@ const WordleGame = () => {
     setTriggerConfetti(false); // Reset confetti trigger
   };
 
-  // Keyboard buttons layout (same as Wordle)
-  const keyboardRows = [
-    ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
-    ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
-    ["Z", "X", "C", "V", "B", "N", "M", "Backspace", "Enter"],
-  ];
-
   return (
     <div className="relative bg-gray-900 py-8 px-4">
       <div className="flex justify-center items-start w-full max-w-4xl mx-auto">
         {/* Wordle Game Board Container */}
         <div className="flex flex-col items-center max-w-sm w-full">
-          <h1 className="text-2xl font-bold mb-4 text-white">Wordle Game</h1>
+          {/* <h1 className="text-2xl font-bold mb-4 text-white">Wordle Game</h1> */}
 
           <div className="grid grid-rows-6 gap-2 mb-4 justify-center">
             {Array.from({ length: 6 }).map((_, attemptIndex) => (
@@ -119,7 +113,7 @@ const WordleGame = () => {
                   return (
                     <div
                       key={charIndex}
-                      className={`w-12 h-16 flex items-center justify-center border-2 border-gray-700 text-lg font-bold 
+                      className={`w-12 h-12 flex items-center justify-center border-2 border-gray-700 text-lg font-bold 
                         ${result === "correct" ? "bg-green-500 text-white" : ""}
                         ${result === "close" ? "bg-yellow-300 text-black" : ""}
                         ${result === "wrong" ? "bg-gray-500 text-white" : ""}`}
@@ -132,6 +126,7 @@ const WordleGame = () => {
             ))}
           </div>
 
+          {/* Toggle between text input and on-screen keyboard */}
           {!keyboardMode ? (
             <input
               type="text"
@@ -148,22 +143,7 @@ const WordleGame = () => {
               }}
             />
           ) : (
-            <div className="flex flex-col items-center w-full">
-              {keyboardRows.map((row, rowIndex) => (
-                <div key={rowIndex} className="flex justify-center w-full mb-2">
-                  {row.map((key, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleKeyPress(key)}
-                      className="w-10 h-10 bg-gray-700 text-white rounded m-1 text-lg font-bold disabled:opacity-50"
-                      disabled={gameOver}
-                    >
-                      {key === "Backspace" ? "←" : key === "Enter" ? "⏎" : key}
-                    </button>
-                  ))}
-                </div>
-              ))}
-            </div>
+            <Keyboard onKeyPress={handleKeyPress} disabled={gameOver} />
           )}
 
           <button
